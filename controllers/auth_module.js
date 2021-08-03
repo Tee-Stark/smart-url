@@ -16,7 +16,6 @@ const createUser = async (user) => {
         return {
         name: createdUser.name,
         email: createdUser.email,
-        password: createdUser.password,
         token: generateToken(createdUser),
         message: 'Welcome! account successfully created...'
         };
@@ -37,7 +36,7 @@ const generateToken = (user) => {
         email: user.email,
     };
     const secret = config.JWT_SECRET;
-    const options = { expiresIn: '5m'};
+    const options = { expiresIn: '5h'};
     return jwt.sign(payload, secret, options);
 };
 
