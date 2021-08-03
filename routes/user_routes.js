@@ -3,6 +3,7 @@ const bcrypt = require("bcryptjs");
 const Users = require("../controllers/users_module.js");
 const Urls = require("../controllers/urls_module.js");
 const Auth = require("../controllers/auth_module.js");
+const { authorize } = require("../middlewares/authorize.js");
 
 const router = express.Router();
 
@@ -37,7 +38,7 @@ router.post('/login', (req, res) => {
     });
 });
 
-router.post('/:id/shorten', async (req, res) => {
+router.post('/:id/shorten', authorize, async (req, res) => {
     const fullUrl = req.body.fullUrl;
     const userId = req.params.id;
     await Urls.createShort(fullUrl)
@@ -50,7 +51,7 @@ router.post('/:id/shorten', async (req, res) => {
     })
 });
 
-router.get('/:id', (req, res) => {
+router.get('/:id', authorize, (req, res) => {
     const userId = req.params.id;
     Users.getUrls(userId)
     .then(data => {
@@ -61,7 +62,7 @@ router.get('/:id', (req, res) => {
     });
 });
 
-router.put('/:id', (req, res) => {
+router.put('/:id', authorize, (req, res) => {
     const urlId = req.params.id;
     const newShort = req.body.short;
     Urls.modifyShort(urlId, newShort)
